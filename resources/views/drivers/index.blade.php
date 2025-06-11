@@ -25,13 +25,24 @@
                 <td>{{ $driver->status }}</td>
                 <td>
                     <a href="{{ route('drivers.show', $driver) }}" class="btn btn-sm btn-info">More information</a>
-                    @if($driver->status !== 'Approved')
                     <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="status" value="No_approve">
+                        <button class="btn btn-sm btn-danger">No approve</button>
+                    </form>
+                    <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status" value="Pending">
+                        <button class="btn btn-sm btn-warning">Pending</button>
+                    </form>
+                    <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status" value="Approved">
                         <button class="btn btn-sm btn-success">Approve</button>
                     </form>
-                    @endif
                 </td>
             </tr>
             @endforeach

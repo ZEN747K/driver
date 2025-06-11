@@ -29,7 +29,7 @@ class DriverFactory extends Factory
             'compulsory_insurance_path' => 'docs/compulsory.png',
             'vehicle_insurance_path' => 'docs/insurance.png',
             'service_type' => $this->faker->randomElement(['car', 'motorcycle', 'delivery']),
-            'approved' => false,
+            'status' => $this->faker->randomElement(['No_approve', 'Pending', 'Approved']),
         ];
     }
 }

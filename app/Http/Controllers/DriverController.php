@@ -134,11 +134,18 @@ class DriverController extends Controller
     /**
      * Approve the specified driver.
      */
-    public function approve(string $id)
+    public function approve(Request $request, string $id)
     {
         $driver = Driver::findOrFail($id);
-        $driver->status = 'Approved';
+
+        $status = $request->input('status', 'Approved');
+        if (!in_array($status, ['No_approve', 'Pending', 'Approved'])) {
+            $status = 'Approved';
+        }
+
+        $driver->status = $status;
         $driver->save();
+
         return redirect()->route('drivers.index');
     }
 
