@@ -23,6 +23,10 @@
             <input type="password" name="password_for_profile" class="form-control">
         </div>
         <div class="mb-3">
+            <label class="form-label">Bank Account</label>
+            <input type="text" name="bank_account" class="form-control" maxlength="14" required>
+        </div>
+        <div class="mb-3">
             <label class="form-label">Birthdate</label>
             <input type="date" name="birthdate" class="form-control">
         </div>
