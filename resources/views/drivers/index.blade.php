@@ -12,7 +12,7 @@
                 <th>Phone</th>
                 <th>Service</th>
                 <th>Approved</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +24,7 @@
                 <td>{{ $driver->service_type }}</td>
                 <td>{{ $driver->approved ? 'Yes' : 'No' }}</td>
                 <td>
+                    <a href="{{ route('drivers.show', $driver) }}" class="btn btn-sm btn-info">More information</a>
                     @if(!$driver->approved)
                     <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
                         @csrf
