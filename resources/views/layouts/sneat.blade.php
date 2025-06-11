@@ -15,7 +15,11 @@
         <div class="layout-container">
             <nav class="layout-navbar navbar navbar-expand-lg align-items-center bg-navbar-theme">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="{{ route('drivers.index') }}">Admin Panel</a>
+                    @auth('admin')
+                        <a class="navbar-brand" href="{{ route('drivers.index') }}">Admin Panel</a>
+                    @else
+                        <span class="navbar-brand text-muted">Admin Panel</span>
+                    @endauth
                     <ul class="navbar-nav ms-auto">
                         @auth('admin')
                         <li class="nav-item d-flex align-items-center me-2">
