@@ -16,6 +16,7 @@ class Admin extends Authenticatable
         'email',
         'password',
         'api_token',
+        'is_super',
     ];
 
     protected $hidden = [
@@ -28,6 +29,7 @@ class Admin extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'is_super' => 'boolean',
         ];
     }
 }
