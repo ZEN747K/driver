@@ -28,6 +28,6 @@ class Driver extends Model
         'compulsory_insurance_path',
         'vehicle_insurance_path',
         'service_type',
-        'approved',
+        'status',
     ];
 }

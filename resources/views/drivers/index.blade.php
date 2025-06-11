@@ -11,7 +11,7 @@
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Service</th>
-                <th>Approved</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -22,10 +22,10 @@
                 <td>{{ $driver->full_name }}</td>
                 <td>{{ $driver->phone }}</td>
                 <td>{{ $driver->service_type }}</td>
-                <td>{{ $driver->approved ? 'Yes' : 'No' }}</td>
+                <td>{{ $driver->status }}</td>
                 <td>
                     <a href="{{ route('drivers.show', $driver) }}" class="btn btn-sm btn-info">More information</a>
-                    @if(!$driver->approved)
+                    @if($driver->status !== 'Approved')
                     <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('PUT')

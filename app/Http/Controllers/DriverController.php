@@ -57,7 +57,9 @@ class DriverController extends Controller
             $paths[$fileField . '_path'] = $request->file($fileField)->store('drivers', 'public');
         }
 
-        $driver = Driver::create(array_merge($data, $paths));
+        $driver = Driver::create(array_merge($data, $paths, [
+            'status' => 'Pending',
+        ]));
 
         return redirect()->route('drivers.index');
     }
@@ -85,8 +87,40 @@ class DriverController extends Controller
     public function update(Request $request, string $id)
     {
         $driver = Driver::findOrFail($id);
-        $driver->update($request->only('approved'));
-        return redirect()->route('drivers.index');
+
+        $data = $request->validate([
+            'full_name' => 'required|string',
+            'phone' => 'required|string',
+            'email' => 'nullable|email',
+            'birthdate' => 'nullable|date',
+            'gender' => 'nullable|string',
+            'service_type' => 'required|in:car,motorcycle,delivery',
+            'status' => 'required|in:No_approve,Pending,Approved',
+            'id_card' => 'nullable|file',
+            'driver_license' => 'nullable|file',
+            'face_photo' => 'nullable|file',
+            'vehicle_registration' => 'nullable|file',
+            'compulsory_insurance' => 'nullable|file',
+            'vehicle_insurance' => 'nullable|file',
+        ]);
+
+        $paths = [];
+        foreach ([
+            'id_card',
+            'driver_license',
+            'face_photo',
+            'vehicle_registration',
+            'compulsory_insurance',
+            'vehicle_insurance'
+        ] as $fileField) {
+            if ($request->hasFile($fileField)) {
+                $paths[$fileField . '_path'] = $request->file($fileField)->store('drivers', 'public');
+            }
+        }
+
+        $driver->update(array_merge($data, $paths));
+
+        return redirect()->route('drivers.show', $driver)->with('success', 'Driver updated');
     }
 
     /**
@@ -103,7 +137,7 @@ class DriverController extends Controller
     public function approve(string $id)
     {
         $driver = Driver::findOrFail($id);
-        $driver->approved = true;
+        $driver->status = 'Approved';
         $driver->save();
         return redirect()->route('drivers.index');
     }
