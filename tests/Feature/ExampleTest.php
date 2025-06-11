@@ -16,4 +16,11 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(302);
     }
+
+    public function test_guests_are_redirected_to_login_when_accessing_drivers(): void
+    {
+        $response = $this->get('/drivers');
+
+        $response->assertRedirect('/login');
+    }
 }
