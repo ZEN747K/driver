@@ -55,6 +55,9 @@ class AdminAuthController extends Controller
 
         $admin = Admin::where('email', $credentials['email'])->first();
         if (! $admin || ! Hash::check($credentials['password'], $admin->password)) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Invalid credentials'], 422);
+            }
             return back()->withErrors(['email' => 'Invalid credentials']);
         }
 
@@ -62,6 +65,10 @@ class AdminAuthController extends Controller
         $admin->save();
 
         Auth::guard('admin')->login($admin);
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
 
         return redirect()->route('drivers.index');
     }
