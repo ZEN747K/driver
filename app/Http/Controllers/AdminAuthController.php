@@ -12,6 +12,10 @@ class AdminAuthController extends Controller
 {
     public function showLoginForm()
     {
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('drivers.index');
+        }
+
         return view('admin.login');
     }
 
