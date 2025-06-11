@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed" data-theme="theme-default">
+<html lang="en" class="light-style layout-navbar-fixed layout-without-menu" data-theme="theme-default">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,13 +13,13 @@
 <body>
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
-            <nav class="layout-navbar navbar navbar-expand-lg align-items-center bg-navbar-theme">
+            <nav class="layout-navbar navbar navbar-expand-lg align-items-center bg-primary text-white">
+                @auth('admin')
+                    <a class="navbar-brand text-white ps-4" href="{{ route('drivers.index') }}">Admin Panel</a>
+                @else
+                    <span class="navbar-brand text-muted ps-4">Admin Panel</span>
+                @endauth
                 <div class="container-fluid">
-                    @auth('admin')
-                        <a class="navbar-brand" href="{{ route('drivers.index') }}">Admin Panel</a>
-                    @else
-                        <span class="navbar-brand text-muted">Admin Panel</span>
-                    @endauth
                     <ul class="navbar-nav ms-auto">
                         @auth('admin')
                         <li class="nav-item d-flex align-items-center me-2">
@@ -47,7 +47,7 @@
                     <div class="container-xxl flex-grow-1 container-p-y">
                         @yield('content')
                     </div>
-                    <footer class="content-footer footer bg-light">
+                    <footer class="content-footer footer bg-primary text-white">
                         <div class="container-xxl">
                             <div class="footer-container d-flex justify-content-between py-2 flex-md-row flex-column">
                                 <div>© {{ date('Y') }} Admin Panel</div>
