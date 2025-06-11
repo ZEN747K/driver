@@ -26,10 +26,13 @@ class SuperAdminSeeder extends Seeder
         ];
 
         foreach ($supers as $super) {
-            Admin::create($super + [
-                'api_token' => Str::random(60),
-                'is_super' => true,
-            ]);
+            Admin::firstOrCreate(
+                ['email' => $super['email']],
+                $super + [
+                    'api_token' => Str::random(60),
+                    'is_super' => true,
+                ]
+            );
         }
     }
 }
