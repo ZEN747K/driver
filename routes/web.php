@@ -13,8 +13,6 @@ Route::get('/we', function () {
 
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
-Route::get('/admin/register', [AdminAuthController::class, 'showRegisterForm'])->name('admin.register');
-Route::post('/admin/register', [AdminAuthController::class, 'register'])->name('admin.register.submit');
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 Route::resource('drivers', App\Http\Controllers\DriverController::class);

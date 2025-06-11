@@ -14,7 +14,6 @@
             <input type="password" name="password" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
-        <a href="{{ route('admin.register') }}" class="btn btn-link">Register</a>
     </form>
 
     <!-- Modal for login notifications -->
