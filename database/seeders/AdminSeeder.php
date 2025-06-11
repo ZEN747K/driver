@@ -44,7 +44,10 @@ class AdminSeeder extends Seeder
         ];
 
         foreach ($admins as $admin) {
-            Admin::create($admin + ['api_token' => Str::random(60)]);
+            Admin::firstOrCreate(
+                ['email' => $admin['email']],
+                $admin + ['api_token' => Str::random(60)]
+            );
         }
     }
 }
