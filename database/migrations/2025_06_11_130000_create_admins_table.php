@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('name');
             $table->integer('age');
             $table->string('email')->unique();
-            $table->string('document_path')->nullable();
             $table->string('password');
             $table->string('api_token', 80)->unique()->nullable();
             $table->rememberToken();
