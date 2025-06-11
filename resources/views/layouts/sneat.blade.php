@@ -46,7 +46,7 @@
                     <footer class="content-footer footer bg-light">
                         <div class="container-xxl">
                             <div class="footer-container d-flex justify-content-between py-2 flex-md-row flex-column">
-                                <div>© {{ date('Y') }} Sneat</div>
+                                <div>© {{ date('Y') }} Admin Panel</div>
                             </div>
                         </div>
                     </footer>
