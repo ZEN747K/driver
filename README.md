@@ -56,6 +56,16 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
+## Setup
+
+After configuring your `.env` file, run database migrations to create the required tables:
+
+```bash
+php artisan migrate
+```
+
+Without running migrations, authentication for admins will fail because the `admins` table will be missing.
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
