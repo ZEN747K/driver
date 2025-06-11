@@ -43,7 +43,7 @@ class AdminAuthController extends Controller
 
         Auth::guard('admin')->login($admin);
 
-        return redirect()->route('drivers.index');
+        return redirect()->route('drivers.index')->with('success', 'Login completed');
     }
 
     public function login(Request $request)
