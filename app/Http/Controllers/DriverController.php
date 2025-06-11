@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Driver;
+use Illuminate\Support\Facades\Storage;
 
 class DriverController extends Controller
 {
@@ -105,5 +106,29 @@ class DriverController extends Controller
         $driver->approved = true;
         $driver->save();
         return redirect()->route('drivers.index');
+    }
+
+    /**
+     * Download a specific driver document.
+     */
+    public function download(Driver $driver, string $field)
+    {
+        $allowed = [
+            'id_card',
+            'driver_license',
+            'face_photo',
+            'vehicle_registration',
+            'compulsory_insurance',
+            'vehicle_insurance',
+        ];
+
+        if (!in_array($field, $allowed)) {
+            abort(404);
+        }
+
+        $attribute = $field . '_path';
+        $path = $driver->{$attribute};
+
+        return Storage::disk('public')->download($path);
     }
 }

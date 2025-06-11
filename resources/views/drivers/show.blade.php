@@ -39,27 +39,27 @@
         </tr>
         <tr>
             <th>ID Card</th>
-            <td>{{ $driver->id_card_path }}</td>
+            <td><a href="{{ route('drivers.download', [$driver, 'id_card']) }}">{{ basename($driver->id_card_path) }}</a></td>
         </tr>
         <tr>
             <th>Driver License</th>
-            <td>{{ $driver->driver_license_path }}</td>
+            <td><a href="{{ route('drivers.download', [$driver, 'driver_license']) }}">{{ basename($driver->driver_license_path) }}</a></td>
         </tr>
         <tr>
             <th>Face Photo</th>
-            <td>{{ $driver->face_photo_path }}</td>
+            <td><a href="{{ route('drivers.download', [$driver, 'face_photo']) }}">{{ basename($driver->face_photo_path) }}</a></td>
         </tr>
         <tr>
             <th>Vehicle Registration</th>
-            <td>{{ $driver->vehicle_registration_path }}</td>
+            <td><a href="{{ route('drivers.download', [$driver, 'vehicle_registration']) }}">{{ basename($driver->vehicle_registration_path) }}</a></td>
         </tr>
         <tr>
             <th>Compulsory Insurance</th>
-            <td>{{ $driver->compulsory_insurance_path }}</td>
+            <td><a href="{{ route('drivers.download', [$driver, 'compulsory_insurance']) }}">{{ basename($driver->compulsory_insurance_path) }}</a></td>
         </tr>
         <tr>
             <th>Vehicle Insurance</th>
-            <td>{{ $driver->vehicle_insurance_path }}</td>
+            <td><a href="{{ route('drivers.download', [$driver, 'vehicle_insurance']) }}">{{ basename($driver->vehicle_insurance_path) }}</a></td>
         </tr>
     </table>
 </div>
