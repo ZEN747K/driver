@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Database\Seeders\AdminSeeder;
+use Database\Seeders\SuperAdminSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,6 +22,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        $this->call(AdminSeeder::class);
+        $this->call([
+            AdminSeeder::class,
+            SuperAdminSeeder::class,
+        ]);
     }
 }

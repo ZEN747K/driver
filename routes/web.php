@@ -18,3 +18,5 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admi
 Route::resource('drivers', App\Http\Controllers\DriverController::class);
 Route::put('drivers/{driver}/approve', [App\Http\Controllers\DriverController::class, 'approve'])->name('drivers.approve');
 Route::get('drivers/{driver}/download/{field}', [App\Http\Controllers\DriverController::class, 'download'])->name('drivers.download');
+
+Route::resource('admins', App\Http\Controllers\AdminController::class);

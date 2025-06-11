@@ -20,6 +20,18 @@
                     <span class="navbar-brand text-muted ps-4">Admin Panel</span>
                 @endauth
                 <div class="container-fluid">
+                    @auth('admin')
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('drivers.index') }}">Drivers</a>
+                        </li>
+                        @if(auth('admin')->user()->is_super)
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('admins.index') }}">Admins</a>
+                        </li>
+                        @endif
+                    </ul>
+                    @endauth
                     <ul class="navbar-nav ms-auto">
                         @auth('admin')
                         <li class="nav-item d-flex align-items-center me-2">
