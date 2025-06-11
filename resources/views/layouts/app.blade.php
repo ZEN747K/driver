@@ -9,7 +9,11 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('drivers.index') }}">Admin Panel</a>
+            @auth('admin')
+                <a class="navbar-brand" href="{{ route('drivers.index') }}">Admin Panel</a>
+            @else
+                <span class="navbar-brand text-muted">Admin Panel</span>
+            @endauth
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     @auth('admin')
