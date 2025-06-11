@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
 
 Route::get('/', function () {
-    return redirect()->route('drivers.index');
+    return redirect()->route('admin.login');
 });
 
 Route::get('/we', function () {
