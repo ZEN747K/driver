@@ -14,12 +14,12 @@
                 <ul class="navbar-nav ms-auto">
                     @auth('admin')
                     <li class="nav-item">
-                        <span class="navbar-text">{{ auth('admin')->user()->email }}</span>
+                        <span class="navbar-text">{{ auth('admin')->user()->email }} |</span>
                     </li>
                     <li class="nav-item">
                         <form method="POST" action="{{ route('admin.logout') }}">
                             @csrf
-                            <button type="submit" class="btn btn-link nav-link" style="display:inline; padding:0;">Logout</button>
+                            <button type="submit" class="btn btn-link nav-link" style="display:inline; padding:0;"> Logout</button>
                         </form>
                     </li>
                     @endauth
