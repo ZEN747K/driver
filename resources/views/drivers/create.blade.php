@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Add Driver</h1>
+    <a href="{{ route('drivers.index') }}" class="btn btn-secondary mb-3">Back</a>
     <form action="{{ route('drivers.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
