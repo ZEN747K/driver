@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Admin Register</h1>
+    <a href="{{ route('admin.login') }}" class="btn btn-secondary mb-3">Back</a>
     <form method="POST" action="{{ route('admin.register.submit') }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
