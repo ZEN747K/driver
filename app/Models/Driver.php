@@ -21,6 +21,7 @@ class Driver extends Model
         'email',
         'birthdate',
         'gender',
+        'password_for_profile',
         'id_card_path',
         'driver_license_path',
         'face_photo_path',

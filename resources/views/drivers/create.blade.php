@@ -19,6 +19,10 @@
             <input type="email" name="email" class="form-control">
         </div>
         <div class="mb-3">
+            <label class="form-label">Password for Profile</label>
+            <input type="password" name="password_for_profile" class="form-control">
+        </div>
+        <div class="mb-3">
             <label class="form-label">Birthdate</label>
             <input type="date" name="birthdate" class="form-control">
         </div>
