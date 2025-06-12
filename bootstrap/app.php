@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'verify.admin.credentials' => VerifyAdminCredentials::class,
             'validate.request' => App\Http\Middleware\ValidateRequests::class,
+            'auth' => Illuminate\Auth\Middleware\Authenticate::class,
+            'jwt.auth' => Tymon\JWTAuth\Http\Middleware\Authenticate::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

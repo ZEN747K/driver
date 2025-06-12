@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Admin;
 use Illuminate\Support\Str;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminSeeder extends Seeder
 {
@@ -38,11 +39,16 @@ class AdminSeeder extends Seeder
             ],
         ];
 
-        foreach ($admins as $admin) {
-            Admin::firstOrCreate(
-                ['email' => $admin['email']],
-                $admin + ['api_token' => Str::random(60)]
+        foreach ($admins as $adminData) {
+            /** @var \App\Models\Admin $admin */
+            $admin = Admin::firstOrCreate(
+                ['email' => $adminData['email']],
+                $adminData + ['api_token' => Str::random(60)]
             );
+
+            // Generate example JWT token and store in api_token column
+            $admin->api_token = JWTAuth::fromUser($admin);
+            $admin->save();
         }
     }
 }
