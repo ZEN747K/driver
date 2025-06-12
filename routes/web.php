@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('admin.login');
@@ -21,7 +21,7 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])
     ->name('admin.login.submit');
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-Route::middleware('auth:admin')->group(function () {
+Route::middleware(['auth:admin', 'validate.request'])->group(function () {
     Route::resource('drivers', App\Http\Controllers\DriverController::class);
     Route::put('drivers/{driver}/approve', [App\Http\Controllers\DriverController::class, 'approve'])->name('drivers.approve');
     Route::get('drivers/{driver}/download/{field}', [App\Http\Controllers\DriverController::class, 'download'])->name('drivers.download');
