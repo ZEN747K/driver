@@ -157,7 +157,7 @@ class DriverAuthHelper
     public static function getTokenFromRequest($request)
     {
         return $request->bearerToken() ??
-               $request->header('X-Driver-Token') ??
+               $request->header('api-token') ??
                $request->input('token');
     }
 
@@ -178,6 +178,7 @@ class DriverAuthHelper
      */
     public static function checkDriverAuth($request)
     {
+
         $token = self::getTokenFromRequest($request);
         return self::validateDriverToken($token);
     }
