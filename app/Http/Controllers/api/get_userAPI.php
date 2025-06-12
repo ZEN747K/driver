@@ -29,7 +29,12 @@ class get_userAPI extends Controller
      */
     public function show(string $id)
     {
-        //
+        $driver = Driver::find($id);
+        if ($driver) {
+            return response()->json($driver);
+        } else {
+            return response()->json(['error' => 'Driver not found'], 404);
+        }
     }
 
     /**
@@ -37,7 +42,13 @@ class get_userAPI extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $driver = Driver::find($id);
+        if ($driver) {
+            $driver->update($request->all());
+            return response()->json($driver);
+        } else {
+            return response()->json(['error' => 'Driver not found'], 404);
+        }
     }
 
     /**
