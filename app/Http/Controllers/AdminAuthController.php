@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -21,13 +22,16 @@ class AdminAuthController extends Controller
 
     public function login(Request $request)
     {
-        /** @var \App\Models\Admin|null $admin */
-        $admin = $request->attributes->get('admin');
-        if (! $admin) {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $admin = Admin::where('email', $credentials['email'])->first();
+        if (! $admin || ! Hash::check($credentials['password'], $admin->password)) {
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Invalid credentials'], 422);
             }
-
             return back()->withErrors(['email' => 'Invalid credentials']);
         }
 
