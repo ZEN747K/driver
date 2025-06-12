@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminAuthController extends Controller
 {
@@ -31,13 +31,13 @@ class AdminAuthController extends Controller
             return back()->withErrors(['email' => 'Invalid credentials']);
         }
 
-        $admin->api_token = Str::random(60);
+        $admin->api_token = JWTAuth::fromUser($admin);
         $admin->save();
 
         Auth::guard('admin')->login($admin);
 
         if ($request->expectsJson()) {
-            return response()->json(['success' => true]);
+            return response()->json(['token' => $admin->api_token]);
         }
 
         return redirect()->route('drivers.index');

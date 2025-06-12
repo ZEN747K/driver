@@ -8,6 +8,10 @@ use App\Models\Driver;
 
 class get_userAPI extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('jwt.auth');
+    }
     /**
      * Display a listing of the resource.
      */
