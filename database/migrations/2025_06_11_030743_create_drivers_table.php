@@ -22,7 +22,8 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->date('birthdate')->nullable();
             $table->string('gender')->nullable();
-
+            $table->string('password')->nullable();
+            $table->string('bank_account')->nullable();
             $table->string('id_card_path')->nullable();
             $table->string('driver_license_path')->nullable();
             $table->string('face_photo_path')->nullable();
