@@ -11,9 +11,19 @@ class DriverController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $drivers = Driver::all();
+        // เริ่มต้น query จาก Model Driver
+        $query = Driver::query();
+
+        // ตรวจสอบค่าจากฟอร์มค้นหา (ชื่อ)
+        if ($search = $request->input('search')) {
+            $query->where('full_name', 'LIKE', "%{$search}%");
+        }
+
+        // ดึงข้อมูล driver ที่ตรงตามเงื่อนไข
+        $drivers = $query->get();
+
         return view('drivers.index', compact('drivers'));
     }
 
@@ -80,7 +90,7 @@ class DriverController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // การแก้ไขสามารถเพิ่มเข้ามาตามที่ต้องการ
     }
 
     /**
@@ -132,7 +142,7 @@ class DriverController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // การลบข้อมูลสามารถเพิ่มเข้ามาตามที่ต้องการ
     }
 
     /**
