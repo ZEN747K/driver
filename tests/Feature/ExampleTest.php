@@ -32,7 +32,6 @@ class ExampleTest extends TestCase
             'age' => 30,
             'email' => 'admin@example.com',
             'password' => 'password',
-            'api_token' => 'token',
             'is_super' => true,
         ]);
         $this->actingAs($admin, 'admin');

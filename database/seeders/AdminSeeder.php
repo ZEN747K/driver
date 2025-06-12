@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Admin;
-use Illuminate\Support\Str;
 
 class AdminSeeder extends Seeder
 {
@@ -46,7 +45,7 @@ class AdminSeeder extends Seeder
         foreach ($admins as $admin) {
             Admin::firstOrCreate(
                 ['email' => $admin['email']],
-                $admin + ['api_token' => Str::random(60)]
+                $admin
             );
         }
     }

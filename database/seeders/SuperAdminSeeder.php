@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Admin;
-use Illuminate\Support\Str;
 
 class SuperAdminSeeder extends Seeder
 {
@@ -29,7 +28,6 @@ class SuperAdminSeeder extends Seeder
             Admin::firstOrCreate(
                 ['email' => $super['email']],
                 $super + [
-                    'api_token' => Str::random(60),
                     'is_super' => true,
                 ]
             );
