@@ -20,7 +20,7 @@ class DriverFactory extends Factory
             'full_name' => $this->faker->name(),
             'phone' => $this->faker->phoneNumber(),
             'email' => $this->faker->safeEmail(),
-            'password_for_profile' => $this->faker->password(),
+            'password' => $this->faker->password(),
             'bank_account' => $this->faker->numerify(str_repeat('#', 10)),
             'birthdate' => $this->faker->date(),
             'gender' => $this->faker->randomElement(['male', 'female']),
