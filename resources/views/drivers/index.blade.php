@@ -1,8 +1,8 @@
-@extends('layouts.sneat')
-
+@extends('layouts.layout')
+@section('style')
 @section('content')
 <div class="container">
-    <h1>Drivers</h1>
+    <h1 class="mt-4">Drivers</h1>
     <a href="{{ route('drivers.create') }}" class="btn btn-primary mb-3">Add Driver</a>
     <table class="table">
         <thead>
@@ -11,7 +11,7 @@
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Service</th>
-                <th>Status</th>
+                <th>Status</t   h>
                 <th>Actions</th>
             </tr>
         </thead>

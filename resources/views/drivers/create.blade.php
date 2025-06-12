@@ -1,8 +1,8 @@
-@extends('layouts.sneat')
+@extends('layouts.layout')
 
 @section('content')
 <div class="container">
-    <h1>Add Driver</h1>
+    <h1 class="mt-4">ADD Drivers</h1>
     <a href="{{ route('drivers.index') }}" class="btn btn-secondary mb-3">Back</a>
     <form action="{{ route('drivers.store') }}" method="POST" enctype="multipart/form-data">
         @csrf

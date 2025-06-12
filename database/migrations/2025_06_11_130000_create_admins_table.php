@@ -18,7 +18,6 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('age');
             $table->string('email')->unique();
             $table->string('password');
             $table->string('api_token', 80)->unique()->nullable();

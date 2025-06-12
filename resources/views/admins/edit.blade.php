@@ -1,8 +1,8 @@
-@extends('layouts.sneat')
+@extends('layouts.layout')
 
 @section('content')
 <div class="container">
-    <h1>Edit Admin</h1>
+    <h1 class="mt-4">Edit Admins</h1>
     <a href="{{ route('admins.index') }}" class="btn btn-secondary mb-3">Back</a>
     <form action="{{ route('admins.update', $admin) }}" method="POST">
         @csrf
@@ -10,10 +10,6 @@
         <div class="mb-3">
             <label class="form-label">Name</label>
             <input type="text" name="name" class="form-control" value="{{ $admin->name }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Age</label>
-            <input type="number" name="age" class="form-control" value="{{ $admin->age }}" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Email</label>

@@ -13,13 +13,11 @@ class SuperAdminSeeder extends Seeder
         $supers = [
             [
                 'name' => 'Super One',
-                'age' => 45,
                 'email' => 'super1@example.com',
                 'password' => 'superpass1',
             ],
             [
                 'name' => 'Super Two',
-                'age' => 50,
                 'email' => 'super2@example.com',
                 'password' => 'superpass2',
             ],

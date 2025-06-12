@@ -7,14 +7,22 @@ Route::get('/', function () {
     return redirect()->route('admin.login');
 });
 
-Route::get('/we', function () {
-    return view('welcome');
-});
+Route::get('/drivers/index', [AdminAuthController::class, 'drivers'])
+    ->middleware('verify.admin.credentials')
+    ->name('drivers.index');
+
+Route::get('/admins/index', [AdminAuthController::class, 'admins'])
+    ->middleware('verify.admin.credentials')
+    ->name('admins.index');
+
+
+
 
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::get('/login', function () {
     return redirect()->route('admin.login');
 })->name('login');
+
 Route::post('/admin/login', [AdminAuthController::class, 'login'])
     ->middleware('verify.admin.credentials')
     ->name('admin.login.submit');

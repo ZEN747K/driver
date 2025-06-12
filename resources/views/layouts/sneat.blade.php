@@ -1,80 +1,82 @@
 <!DOCTYPE html>
-<html lang="en" class="light-style layout-navbar-fixed layout-without-menu" data-theme="theme-default">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Driver Admin</title>
-    <link rel="stylesheet" href="{{ asset('vendor/fonts/boxicons.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/css/core.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/css/theme-default.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/demo.css') }}">
-    @stack('head')
-</head>
-<body>
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            <nav class="layout-navbar navbar navbar-expand-lg align-items-center bg-primary text-white">
-                @auth('admin')
-                    <a class="navbar-brand text-white ps-4" href="{{ route('drivers.index') }}">Admin Panel</a>
-                @else
-                    <span class="navbar-brand text-muted ps-4">Admin Panel</span>
-                @endauth
-                <div class="container-fluid">
-                    @auth('admin')
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('drivers.index') }}">Drivers</a>
-                        </li>
-                        @if(auth('admin')->user()->is_super)
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('admins.index') }}">Admins</a>
-                        </li>
-                        @endif
-                    </ul>
-                    @endauth
-                    <ul class="navbar-nav ms-auto">
-                        @auth('admin')
-                        <li class="nav-item d-flex align-items-center me-2">
-                            {{ auth('admin')->user()->email }}
-                        </li>
-                        <li class="nav-item">
-                            <form method="POST" action="{{ route('admin.logout') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-link nav-link px-2">Logout</button>
-                            </form>
-                        </li>
-                        @endauth
-                    </ul>
-                </div>
-            </nav>
-            <div class="layout-page">
-                <div class="content-wrapper">
-                    @if(session('success'))
-                        <div class="container-xxl">
-                            <div class="alert alert-success mt-3">
-                                {{ session('success') }}
-                            </div>
-                        </div>
-                    @endif
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        @yield('content')
-                    </div>
-                    <footer class="content-footer footer bg-primary text-white">
-                        <div class="container-xxl">
-                            <div class="footer-container d-flex justify-content-between py-2 flex-md-row flex-column">
-                                <div>© {{ date('Y') }} Admin Panel</div>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-            </div>
-        </div>
+<html
+  lang="en"
+  class="light-style customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Login Page</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <!-- <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" /> -->
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <!-- Page CSS -->
+    <!-- Page -->
+    <link rel="stylesheet" href="../assets/vendor/css/pages/page-auth.css" />
+    <!-- Helpers -->
+    <script src="../assets/vendor/js/helpers.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="../assets/js/config.js"></script>
+
+  </head>
+
+  <body>
+    <!-- Content -->
+
+    <div class="container-xxl">
+      @yield('content')
     </div>
-    <script src="{{ asset('vendor/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('vendor/js/helpers.js') }}"></script>
-    <script src="{{ asset('vendor/js/menu.js') }}"></script>
-    <script src="{{ asset('js/config.js') }}"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
-    @yield('scripts')
-</body>
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../assets/vendor/js/bootstrap.js"></script>
+    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="../assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+
+    <!-- Main JS -->
+    <script src="../assets/js/main.js"></script>
+
+    <!-- Page JS -->
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </body>
 </html>

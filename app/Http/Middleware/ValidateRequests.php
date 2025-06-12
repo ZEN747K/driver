@@ -66,7 +66,6 @@ class ValidateRequests
             case 'admins.store':
                 $request->validate([
                     'name' => 'required|string',
-                    'age' => 'required|integer',
                     'email' => 'required|email|unique:admins,email',
                     'password' => 'required|string',
                     'is_super' => 'sometimes|boolean',
@@ -79,7 +78,6 @@ class ValidateRequests
                 }
                 $request->validate([
                     'name' => 'required|string',
-                    'age' => 'required|integer',
                     'email' => 'required|email|unique:admins,email,'.$adminId,
                     'password' => 'nullable|string',
                     'is_super' => 'sometimes|boolean',

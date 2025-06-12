@@ -37,17 +37,18 @@ class AdminController extends Controller
         $this->authorizeSuper();
         $data = $request->validate([
             'name' => 'required|string',
-            'age' => 'required|integer',
             'email' => 'required|email|unique:admins,email',
             'password' => 'required|string',
             'is_super' => 'sometimes|boolean',
         ]);
 
+        $data['password'] = Hash::make($data['password']); // เข้ารหัสรหัสผ่าน
         $data['api_token'] = Str::random(60);
         $data['is_super'] = $request->boolean('is_super');
+
         Admin::create($data);
 
-        return redirect()->route('admins.index');
+        return redirect()->route('admins.index')->with('success', 'เพิ่มผู้ดูแลระบบสำเร็จ');
     }
 
     public function edit(string $id)
@@ -63,21 +64,21 @@ class AdminController extends Controller
         $admin = Admin::findOrFail($id);
         $data = $request->validate([
             'name' => 'required|string',
-            'age' => 'required|integer',
-            'email' => 'required|email|unique:admins,email,'.$admin->id,
+            'email' => 'required|email|unique:admins,email,' . $admin->id,
             'password' => 'nullable|string',
             'is_super' => 'sometimes|boolean',
         ]);
+
         if ($request->filled('password')) {
             $admin->password = Hash::make($data['password']);
         }
+
         $admin->name = $data['name'];
-        $admin->age = $data['age'];
         $admin->email = $data['email'];
         $admin->is_super = $request->boolean('is_super');
         $admin->save();
 
-        return redirect()->route('admins.index');
+        return redirect()->route('admins.index')->with('success', 'อัปเดตข้อมูลผู้ดูแลระบบสำเร็จ');
     }
 
     public function destroy(string $id)
@@ -85,6 +86,7 @@ class AdminController extends Controller
         $this->authorizeSuper();
         $admin = Admin::findOrFail($id);
         $admin->delete();
-        return redirect()->route('admins.index');
+
+        return redirect()->route('admins.index')->with('success', 'ลบผู้ดูแลระบบเรียบร้อยแล้ว');
     }
 }

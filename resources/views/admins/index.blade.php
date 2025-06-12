@@ -1,8 +1,8 @@
-@extends('layouts.sneat')
+@extends('layouts.layout')
 
 @section('content')
 <div class="container">
-    <h1>Admins</h1>
+    <h1 class="mt-4">Admins</h1>
     <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add Admin</a>
     <table class="table">
         <thead>

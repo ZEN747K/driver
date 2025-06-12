@@ -17,7 +17,6 @@ class AdminFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'age' => $this->faker->numberBetween(20, 60),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => 'password',
             'api_token' => Str::random(60),
