@@ -6,5 +6,4 @@ use App\Http\Controllers\api\get_userAPI;
 
 Route::get('/user', [get_userAPI::class, 'index']);
 Route::get('/user/{id}', [get_userAPI::class, 'show']);
-Route::post('/user/{id}', [get_userAPI::class, 'authenticate']);
 
