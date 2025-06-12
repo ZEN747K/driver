@@ -50,21 +50,31 @@
         })
     </script>
     @endif
+  
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
             @include('layouts.menu')
             <div class="layout-page">
     @include('layouts.navheader')
 
-    <div class="content-wrapper"> 
-        @yield('content')
+    <div class="content-wrapper">
+  <div class="container-xxl py-4">
+    <div class="card shadow-sm border-0" style="background-color: #ffffff; min-height: 80vh;">
+      <div class="card-body d-flex flex-column justify-content-between" style="min-height: 80vh;">
+        
+        <div class="flex-grow-1">
+          @yield('content')
+        </div>
 
-        <footer class="content-footer footer bg-footer-theme">
-            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                <div class="mb-2 mb-md-0">
-                    © <script>document.write(new Date().getFullYear());</script>, So Fin By So Smart Solution
-                </div>
-            </div>
+        <footer class="mt-4 pt-3 border-top text-center text-muted small">
+        </footer>
+
+      </div>
+    </div>
+  </div>
+</div>
+         <footer class="mt-4 pt-3 border-top text-center text-muted fs-5">
+          © <script>document.write(new Date().getFullYear());</script>, So Fin By So Smart Solution
         </footer>
 
         <div class="content-backdrop fade"></div>

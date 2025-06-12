@@ -1,7 +1,7 @@
 <style>
     .menu-item.active > .menu-link {
-        background-color: #f0f0f0; /* เปลี่ยนเป็นสีที่คุณต้องการสำหรับ highlight */
-        border-left: 3px solid #0d6efd; /* ตัวอย่างการเติมเส้นด้านซ้าย */
+        background-color: #f0f0f0;
+        border-left: 3px solid #0d6efd; 
     }
 </style>
 
@@ -17,7 +17,7 @@
     <div class="menu-inner-shadow"></div>
     <ul class="menu-inner py-1">
 
-        <!-- เมนู Dashboard -->
+        <!--  Dashboard -->
         <li class="menu-item {{ request()->routeIs('drivers.index') ? 'active' : '' }}">
             <a href="{{ route('drivers.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
@@ -25,7 +25,7 @@
             </a>
         </li>
 
-        <!-- เมนูสำหรับ Admin เฉพาะผู้ดูแลระบบ -->
+        <!--  หน้า add Admin -->
         @if(auth('admin')->check() && auth('admin')->user()->is_super)
             <li class="menu-item {{ request()->routeIs('admins.index') ? 'active' : '' }}">
                 <a href="{{ route('admins.index') }}" class="menu-link">
