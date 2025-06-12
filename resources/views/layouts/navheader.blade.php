@@ -31,7 +31,9 @@
                                 @auth('admin')
                                     <div class="flex-grow-1">
                                         <span class="fw-semibold d-block">{{ auth('admin')->user()->email }}</span>
-                                        <small class="text-muted">Admin</small>
+                                        <small class="text-muted">
+                                            {{ auth('admin')->user()->is_super ? 'Super Admin' : 'Admin' }}
+                                        </small>
                                     </div>
                                 @endauth
                             </div>

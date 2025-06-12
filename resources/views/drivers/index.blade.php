@@ -1,6 +1,11 @@
 @extends('layouts.layout')
+
+@section('title', 'Drivers')
+
 @section('style')
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
 @endsection
+
 @section('content')
 <div class="container">
     <h1 class="mt-4">Drivers</h1>
@@ -16,7 +21,8 @@
     </form>
 
     <a href="{{ route('drivers.create') }}" class="btn btn-primary mb-3">Add Driver</a>
-    <table class="table">
+    
+    <table id="drivers-table" class="table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -36,7 +42,7 @@
                     <td>{{ $driver->phone }}</td>
                     <td>{{ $driver->service_type }}</td>
                     <td>{{ $driver->status }}</td>
-                    <td>{{ $driver->updated_at->format('Y-m-d H:i:s') }}</td> <!-- Display Last Updated -->
+                    <td>{{ $driver->updated_at->format('Y-m-d H:i:s') }}</td>
                     <td>
                         <a href="{{ route('drivers.show', $driver) }}" class="btn btn-sm btn-info">More information</a>
                         <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
@@ -63,4 +69,19 @@
         </tbody>
     </table>
 </div>
+@endsection
+
+@section('script')
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#drivers-table').DataTable({
+        language: {
+  url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/th.json'
+}
+
+      });
+    });
+  </script>
 @endsection
