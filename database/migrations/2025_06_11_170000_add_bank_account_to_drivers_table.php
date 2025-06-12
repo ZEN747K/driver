@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('drivers', function (Blueprint $table) {
-            $table->string('bank_account', 14)->after('password_for_profile');
+            $table->string('bank_account', 14)->after('password');
         });
     }
 

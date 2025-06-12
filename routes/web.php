@@ -8,11 +8,9 @@ Route::get('/', function () {
 });
 
 Route::get('/drivers/index', [AdminAuthController::class, 'drivers'])
-    ->middleware('verify.admin.credentials')
     ->name('drivers.index');
 
 Route::get('/admins/index', [AdminAuthController::class, 'admins'])
-    ->middleware('verify.admin.credentials')
     ->name('admins.index');
 
 

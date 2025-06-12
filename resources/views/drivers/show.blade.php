@@ -41,14 +41,14 @@
                 value="{{ old('email', $driver->email) }}">
         </div>
 
-        {{-- Password for Profile --}}
+        {{-- Password --}}
         <div class="mb-3">
-            <label class="form-label">Password for Profile</label>
+            <label class="form-label">Password</label>
             <input
                 type="password"
-                name="password_for_profile"
+                name="password"
                 class="form-control"
-                value="{{ old('password_for_profile', $driver->password_for_profile) }}">
+                value="{{ old('password', $driver->password) }}">
         </div>
 
         {{-- Bank Account --}}

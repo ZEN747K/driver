@@ -21,7 +21,6 @@ class Driver extends Model
         'email',
         'birthdate',
         'gender',
-        'password_for_profile',
         'bank_account',
         'id_card_path',
         'driver_license_path',
@@ -31,5 +30,15 @@ class Driver extends Model
         'vehicle_insurance_path',
         'service_type',
         'status',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'date',
+        'password' => 'hashed',
     ];
 }
