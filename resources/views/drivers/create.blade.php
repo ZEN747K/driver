@@ -30,13 +30,35 @@
             <label class="form-label">Birthdate</label>
             <input type="date" name="birthdate" class="form-control">
         </div>
-        <div class="mb-3">
-            <label class="form-label">Gender</label>
-            <select name="gender" class="form-select">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
-        </div>
+     <div class="mb-3">
+    <label class="form-label">Gender</label>
+    <select name="gender" class="form-select" id="genderSelect">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option> <!-- เพิ่มตัวเลือก "Other" -->
+    </select>
+</div>
+
+<!-- ฟิลด์สำหรับกรอกเพศเอง -->
+<div class="mb-3" id="customGenderField" style="display: none;">
+    <label class="form-label">Please specify</label>
+    <input type="text" id="customGenderInput" class="form-control" placeholder="Enter gender">
+</div>
+
+<script>
+    document.getElementById('genderSelect').addEventListener('change', function() {
+        const customGenderField = document.getElementById('customGenderField');
+        const customGenderInput = document.getElementById('customGenderInput');
+
+        if (this.value === 'other') {
+            customGenderField.style.display = 'block';
+            customGenderInput.setAttribute('name', 'gender'); // เปลี่ยน name เพื่อให้ส่งค่าไปยังฟอร์ม
+        } else {
+            customGenderField.style.display = 'none';
+            customGenderInput.removeAttribute('name'); // ลบ name ออกเมื่อไม่ได้เลือก "Other"
+        }
+    });
+</script>
         <div class="mb-3">
             <label class="form-label">ID Card</label>
             <input type="file" name="id_card" class="form-control" required>
