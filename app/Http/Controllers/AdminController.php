@@ -43,7 +43,6 @@ class AdminController extends Controller
             'is_super' => 'sometimes|boolean',
         ]);
 
-        $data['api_token'] = Str::random(60);
         $data['is_super'] = $request->boolean('is_super');
         Admin::create($data);
 

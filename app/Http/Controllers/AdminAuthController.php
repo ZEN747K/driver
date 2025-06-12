@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class AdminAuthController extends Controller
 {
@@ -31,14 +30,14 @@ class AdminAuthController extends Controller
             return back()->withErrors(['email' => 'Invalid credentials']);
         }
 
-        $admin->api_token = Str::random(60);
-        $admin->save();
+        /** @var \App\Models\Admin $admin */
+        $token = $admin->createToken('api-token')->plainTextToken;
 
         Auth::guard('admin')->login($admin);
 
         if ($request->expectsJson()) {
             return response()->json([
-                'token' => $admin->api_token,
+                'token' => $token,
             ]);
         }
 

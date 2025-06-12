@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Admin>
@@ -20,7 +19,6 @@ class AdminFactory extends Factory
             'age' => $this->faker->numberBetween(20, 60),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => 'password',
-            'api_token' => Str::random(60),
             'is_super' => false,
         ];
     }
