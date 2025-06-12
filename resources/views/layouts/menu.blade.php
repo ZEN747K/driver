@@ -1,8 +1,10 @@
 <style>
-    .bg-menu-theme .menu-header:before {
-        width: 0rem !important;
+    .menu-item.active > .menu-link {
+        background-color: #f0f0f0; /* เปลี่ยนเป็นสีที่คุณต้องการสำหรับ highlight */
+        border-left: 3px solid #0d6efd; /* ตัวอย่างการเติมเส้นด้านซ้าย */
     }
 </style>
+
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="" class="app-brand-link">
@@ -12,26 +14,26 @@
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
     </div>
-    <div class="menu-inner-shadow">
-
-    </div>
+    <div class="menu-inner-shadow"></div>
     <ul class="menu-inner py-1">
-    <li class="menu-item">
-        <a href="{{ route('drivers.index') }}" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-home-circle"></i>
-            <div data-i18n="Analytics">Dashboard</div>
-        </a>
-    </li>
 
-    @if(auth('admin')->check() && auth('admin')->user()->is_super)
-    <li class="menu-item">
-        <a href="{{ route('admins.index') }}" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-user"></i>
-            <div data-i18n="Analytics"> Admin </div>
-        </a>
-    </li>
-@endif
+        <!-- เมนู Dashboard -->
+        <li class="menu-item {{ request()->routeIs('drivers.index') ? 'active' : '' }}">
+            <a href="{{ route('drivers.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Dashboard</div>
+            </a>
+        </li>
 
-</ul>
+        <!-- เมนูสำหรับ Admin เฉพาะผู้ดูแลระบบ -->
+        @if(auth('admin')->check() && auth('admin')->user()->is_super)
+            <li class="menu-item {{ request()->routeIs('admins.index') ? 'active' : '' }}">
+                <a href="{{ route('admins.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-user"></i>
+                    <div data-i18n="Analytics">Admin</div>
+                </a>
+            </li>
+        @endif
 
+    </ul>
 </aside>
