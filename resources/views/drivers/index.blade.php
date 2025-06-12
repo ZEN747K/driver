@@ -1,5 +1,6 @@
 @extends('layouts.layout')
 @section('style')
+@endsection
 @section('content')
 <div class="container">
     <h1 class="mt-4">Drivers</h1>
@@ -11,7 +12,8 @@
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Service</th>
-                <th>Status</t   h>
+                <th>Status</th>
+                <th>Last Updated</th> <!-- New Column -->
                 <th>Actions</th>
             </tr>
         </thead>
@@ -23,6 +25,7 @@
                 <td>{{ $driver->phone }}</td>
                 <td>{{ $driver->service_type }}</td>
                 <td>{{ $driver->status }}</td>
+                <td>{{ $driver->updated_at->format('Y-m-d H:i:s') }}</td> <!-- Display Last Updated -->
                 <td>
                     <a href="{{ route('drivers.show', $driver) }}" class="btn btn-sm btn-info">More information</a>
                     <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
