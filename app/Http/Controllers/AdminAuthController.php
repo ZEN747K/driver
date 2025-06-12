@@ -37,7 +37,9 @@ class AdminAuthController extends Controller
         Auth::guard('admin')->login($admin);
 
         if ($request->expectsJson()) {
-            return response()->json(['success' => true]);
+            return response()->json([
+                'token' => $admin->api_token,
+            ]);
         }
 
         return redirect()->route('drivers.index');
