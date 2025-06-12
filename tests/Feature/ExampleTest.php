@@ -23,4 +23,22 @@ class ExampleTest extends TestCase
 
         $response->assertRedirect('/login');
     }
+
+    public function test_driver_store_validation_runs_via_middleware(): void
+    {
+        $admin = new \App\Models\Admin([
+            'id' => 1,
+            'name' => 'Test Admin',
+            'age' => 30,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+            'api_token' => 'token',
+            'is_super' => true,
+        ]);
+        $this->actingAs($admin, 'admin');
+
+        $response = $this->post('/drivers', []);
+
+        $response->assertSessionHasErrors(['full_name']);
+    }
 }

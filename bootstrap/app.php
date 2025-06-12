@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Middleware\VerifyAdminCredentials;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\VerifyAdminCredentials;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'verify.admin.credentials' => VerifyAdminCredentials::class,
+            'validate.request' => App\Http\Middleware\ValidateRequests::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
