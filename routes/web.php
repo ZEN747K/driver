@@ -12,7 +12,6 @@ Route::get('/we', function () {
 });
 
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-// Additional alias so the auth middleware can redirect unauthorized users
 Route::get('/login', function () {
     return redirect()->route('admin.login');
 })->name('login');
