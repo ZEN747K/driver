@@ -10,7 +10,6 @@
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <ul class="navbar-nav flex-row align-items-center ms-auto">
 
-            {{-- Dropdown --}}
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
@@ -40,14 +39,12 @@
 
                     @auth('admin')
                         <li>
-                            <!-- ปุ่ม Logout -->
                             <a class="dropdown-item" href="#"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="bx bx-power-off me-2"></i>
                                 <span class="align-middle">Logout</span>
                             </a>
 
-                            <!-- ฟอร์ม Logout แบบ POST -->
                             <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>

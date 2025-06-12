@@ -46,9 +46,9 @@
             <label class="form-label">Password for Profile</label>
             <input
                 type="password"
-                name="password_for_profile"
+                name="password"
                 class="form-control"
-                value="{{ old('password_for_profile', $driver->password_for_profile) }}">
+                value="{{ old('password', $driver->password) }}">
         </div>
 
         {{-- Bank Account --}}

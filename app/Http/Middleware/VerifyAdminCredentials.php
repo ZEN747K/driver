@@ -22,10 +22,10 @@ class VerifyAdminCredentials
         $admin = Admin::where('email', $credentials['email'])->first();
         if (! $admin || ! Hash::check($credentials['password'], $admin->password)) {
             if ($request->expectsJson()) {
-                return response()->json(['message' => 'Invalid credentials'], 422);
+                return response()->json(['message' => 'Invalid Username or Password'], 422);
             }
 
-            return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
+            return redirect()->back()->withErrors(['email' => 'Invalid Username or Password']);
         }
 
         $request->attributes->set('admin', $admin);

@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('drivers', function (Blueprint $table) {
-            $table->string('password_for_profile')->nullable()->after('gender');
+            $table->string('password')->nullable()->after('gender');
         });
     }
 
     public function down(): void
     {
         Schema::table('drivers', function (Blueprint $table) {
-            $table->dropColumn('password_for_profile');
+            $table->dropColumn('password');
         });
     }
 };
