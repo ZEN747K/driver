@@ -12,7 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias('verify.admin.credentials', VerifyAdminCredentials::class);
+        $middleware->alias([
+            'verify.admin.credentials' => VerifyAdminCredentials::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
