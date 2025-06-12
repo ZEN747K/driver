@@ -9,9 +9,7 @@ use Illuminate\Support\Str;
 
 class AdminAuthController extends Controller
 {
-    /**
-     * แสดงหน้า Login สำหรับ Admin
-     */
+
     public function showLoginForm()
     {
         if (Auth::guard('admin')->check()) {
@@ -21,12 +19,9 @@ class AdminAuthController extends Controller
         return view('admin.login');
     }
 
-    /**
-     * ทำการตรวจสอบข้อมูลและเข้าสู่ระบบสำหรับ Admin
-     */
+    
     public function login(Request $request)
     {
-        // Validate ข้อมูลที่ส่งมา
         $credentials = $request->validate([
             'email'    => 'required|email',
             'password' => 'required'
@@ -55,9 +50,7 @@ class AdminAuthController extends Controller
         return redirect()->route('drivers.index');
     }
 
-    /**
-     * ทำการออกจากระบบ Admin
-     */
+    
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout();
