@@ -142,7 +142,24 @@ class DriverController extends Controller
      */
     public function destroy(string $id)
     {
-        // การลบข้อมูลสามารถเพิ่มเข้ามาตามที่ต้องการ
+                $driver = Driver::findOrFail($id);
+
+        foreach ([
+            'id_card_path',
+            'driver_license_path',
+            'face_photo_path',
+            'vehicle_registration_path',
+            'compulsory_insurance_path',
+            'vehicle_insurance_path',
+        ] as $pathField) {
+            if ($driver->$pathField) {
+                Storage::disk('public')->delete($driver->$pathField);
+            }
+        }
+
+        $driver->delete();
+
+        return redirect()->route('drivers.index')->with('success', 'Driver deleted');
     }
 
     /**

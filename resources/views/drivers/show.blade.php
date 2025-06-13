@@ -165,6 +165,11 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Save</button>
+     <form action="{{ route('drivers.destroy', $driver) }}" method="POST" class="mt-2" onsubmit="return confirm('Are you sure you want to delete this driver?');">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this driver?');" >Delete Driver</button>
+    </form>
     </form>
 </div>
 @endsection
