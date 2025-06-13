@@ -49,13 +49,13 @@
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="status" value="No_approve">
-                            <button class="btn btn-sm btn-danger">No approve</button>
+                            <button class="btn btn-sm btn-danger">rejected</button>
                         </form>
                         <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="status" value="Pending">
-                            <button class="btn btn-sm btn-warning">Pending</button>
+                            <!-- <button class="btn btn-sm btn-warning">Pending</button> -->
                         </form>
                         <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
                             @csrf
