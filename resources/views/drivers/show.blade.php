@@ -5,6 +5,16 @@
     <h1 class="mt-4">Driver Details</h1>
     <a href="{{ route('drivers.index') }}" class="btn btn-secondary mb-3">Back</a>
 
+    @if($driver->remark)
+        <div class="mb-3">
+            <label class="form-label">Remark</label>
+            <textarea class="form-control" readonly>{{ $driver->remark }}</textarea>
+            @if($driver->remarked_at)
+                <small class="text-muted">{{ $driver->remarked_at->format('Y-m-d H:i:s') }}</small>
+            @endif
+        </div>
+    @endif
+
     <form action="{{ route('drivers.update', $driver) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')

@@ -169,12 +169,18 @@ class DriverController extends Controller
     {
         $driver = Driver::findOrFail($id);
 
-        $status = $request->input('status', 'Approved');
-        if (!in_array($status, ['No_approve', 'Pending', 'Approved'])) {
-            $status = 'Approved';
+        $data = $request->validate([
+            'status' => 'required|in:No_approve,Pending,Approved',
+            'remark' => 'nullable|string',
+        ]);
+
+        if ($data['status'] === 'No_approve') {
+            $request->validate(['remark' => 'required|string']);
+            $driver->remark = $data['remark'];
+            $driver->remarked_at = now();
         }
 
-        $driver->status = $status;
+        $driver->status = $data['status'];
         $driver->save();
 
         return redirect()->route('drivers.index');
