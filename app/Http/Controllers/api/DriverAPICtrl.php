@@ -104,10 +104,9 @@ class DriverAPICtrl extends Controller
             'vehicle_insurance_path' => 'nullable|string',
             'service_type' => 'nullable|string',
             'status' => 'nullable|string',
-            'os' => 'nullable|string'
         ]);
 
-        // $validated['os'] = $os;
+        $validated['os'] = $os;
 
         // บันทึกข้อมูล
         $driver = Driver::create($validated);
