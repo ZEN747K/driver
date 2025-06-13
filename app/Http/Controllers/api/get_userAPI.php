@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Driver;
+use Illuminate\Support\Facades\Storage;
 
 class get_userAPI extends Controller
 {
@@ -13,7 +14,14 @@ class get_userAPI extends Controller
      */
     public function index()
     {
-        return response()->json(Driver::all());
+        $drivers = Driver::all();
+
+        $drivers->transform(function ($driver) {
+            $this->appendFileUrls($driver);
+            return $driver;
+        });
+
+        return response()->json($drivers);
     }
 
     /**
@@ -35,6 +43,8 @@ class get_userAPI extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
+        $this->appendFileUrls($user);
+
         return response()->json($user);
     }
 
@@ -52,5 +62,23 @@ class get_userAPI extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    private function appendFileUrls(Driver $driver)
+    {
+        $fields = [
+            'id_card_path',
+            'driver_license_path',
+            'face_photo_path',
+            'vehicle_registration_path',
+            'compulsory_insurance_path',
+            'vehicle_insurance_path',
+        ];
+
+        foreach ($fields as $field) {
+            if ($driver->{$field}) {
+                $driver->{$field} = Storage::disk('public')->url($driver->{$field});
+            }
+        }
     }
 }
