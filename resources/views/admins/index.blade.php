@@ -4,7 +4,7 @@
 <div class="container">
     <h1 class="mt-4">Admins</h1>
     <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add Admin</a>
-    <table class="table">
+    <table id="adminTable" class="table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -34,4 +34,13 @@
         </tbody>
     </table>
 </div>
+@endsection
+
+@section('script')
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#adminTable').DataTable();
+        });
+    </script>
 @endsection
