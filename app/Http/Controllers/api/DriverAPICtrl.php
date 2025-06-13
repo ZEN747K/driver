@@ -80,4 +80,34 @@ class DriverAPICtrl extends Controller
             ], 404);
         }
     }
+    public function store(Request $request)
+    {
+        // Validate ข้อมูล
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|email|unique:drivers,email',
+            'birthdate' => 'nullable|date',
+            'gender' => 'nullable|string',
+            'password' => 'required|string|min:6',
+
+            'bank_account' => 'nullable|string',
+            'id_card_path' => 'nullable|string',
+            'driver_license_path' => 'nullable|string',
+            'face_photo_path' => 'nullable|string',
+            'vehicle_registration_path' => 'nullable|string',
+            'compulsory_insurance_path' => 'nullable|string',
+            'vehicle_insurance_path' => 'nullable|string',
+            'service_type' => 'nullable|string',
+            'status' => 'nullable|string',
+        ]);
+
+        // บันทึกข้อมูล
+        $driver = Driver::create($validated);
+
+        return response()->json([
+            'message' => 'Driver created successfully',
+            'data' => $driver
+        ], 201);
+    }
 }
