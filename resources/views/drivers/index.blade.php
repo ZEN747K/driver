@@ -45,11 +45,12 @@
                     <td>{{ $driver->updated_at->format('Y-m-d H:i:s') }}</td>
                     <td>
                         <a href="{{ route('drivers.show', $driver) }}" class="btn btn-sm btn-info">More information</a>
-                        <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;" class="reject-form">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="status" value="No_approve">
-                            <button class="btn btn-sm btn-danger">rejected</button>
+                            <input type="hidden" name="remark" value="">
+                            <button type="button" class="btn btn-sm btn-danger btn-reject">rejected</button>
                         </form>
                         <form action="{{ route('drivers.approve', $driver) }}" method="POST" style="display:inline;">
                             @csrf
@@ -74,9 +75,45 @@
 @section('script')
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     $(document).ready(function() {
-      $('#drivers-table').DataTable(); 
+      $('#drivers-table').DataTable();
+
+      $('.btn-reject').on('click', function (e) {
+        e.preventDefault();
+        const form = $(this).closest('form');
+        Swal.fire({
+          title: 'Reject driver?',
+          text: 'ต้องการกด rejected หรือไม่',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No'
+        }).then(result => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: 'เหตุผลในการ Reject',
+              input: 'textarea',
+              inputAttributes: { required: true },
+              showCancelButton: true,
+              confirmButtonText: 'Submit',
+              cancelButtonText: 'Cancel',
+              preConfirm: value => {
+                if (!value) {
+                  Swal.showValidationMessage('กรุณากรอกเหตุผล');
+                }
+                return value;
+              }
+            }).then(res => {
+              if (res.isConfirmed) {
+                form.find('input[name="remark"]').val(res.value);
+                form.submit();
+              }
+            });
+          }
+        });
+      });
     });
   </script>
 @endsection

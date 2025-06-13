@@ -31,7 +31,9 @@ class Driver extends Model
         'vehicle_insurance_path',
         'service_type',
         'status',
-        'os'
+        'os',
+        'remark',
+        'remarked_at'
     ];
 
     protected $hidden = [
@@ -42,5 +44,6 @@ class Driver extends Model
     protected $casts = [
         'email_verified_at' => 'date',
         'password' => 'hashed',
+        'remarked_at' => 'datetime',
     ];
 }
