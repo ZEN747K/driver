@@ -76,12 +76,7 @@
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
   <script>
     $(document).ready(function() {
-      $('#drivers-table').DataTable({
-        language: {
-  url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/th.json'
-}
-
-      });
+      $('#drivers-table').DataTable(); 
     });
   </script>
 @endsection
