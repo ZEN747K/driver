@@ -10,7 +10,7 @@
 <div class="container">
     <h1 class="mt-4">Drivers</h1>
 
-    <form action="{{ route('drivers.index') }}" method="GET" class="row mb-3 align-items-end">
+    <!-- <form action="{{ route('drivers.index') }}" method="GET" class="row mb-3 align-items-end">
         <div class="col-md-4">
             <input type="text" name="search" class="form-control" placeholder="ค้นหาจากชื่อ" value="{{ request('search') }}">
         </div>
@@ -18,10 +18,10 @@
             <button type="submit" class="btn btn-primary">ค้นหา</button>
             <a href="{{ route('drivers.index') }}" class="btn btn-secondary">แสดงทั้งหมด</a>
         </div>
-    </form>
+    </form> -->
 
     <a href="{{ route('drivers.create') }}" class="btn btn-primary mb-3">Add Driver</a>
-    
+
     <table id="drivers-table" class="table">
         <thead>
             <tr>

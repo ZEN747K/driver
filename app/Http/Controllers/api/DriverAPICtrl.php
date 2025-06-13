@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Driver;
 use App\Helpers\DriverAuthHelper;
 use App\Http\Controllers\Controller;
+use Jenssegers\Agent\Agent;
+
 
 class DriverAPICtrl extends Controller
 {
@@ -82,6 +84,8 @@ class DriverAPICtrl extends Controller
     }
     public function store(Request $request)
     {
+        // เก็บ OS ของผู้ใช้
+        $os = $_SERVER['HTTP_USER_AGENT'];
         // Validate ข้อมูล
         $validated = $request->validate([
             'full_name' => 'required|string|max:255',
@@ -100,13 +104,17 @@ class DriverAPICtrl extends Controller
             'vehicle_insurance_path' => 'nullable|string',
             'service_type' => 'nullable|string',
             'status' => 'nullable|string',
+            'os' => 'nullable|string'
         ]);
+
+        // $validated['os'] = $os;
 
         // บันทึกข้อมูล
         $driver = Driver::create($validated);
 
         return response()->json([
-            'message' => 'Driver created successfully',
+            'message' => 'Driver     created successfully',
+            'os' => $os,
             'data' => $driver
         ], 201);
     }

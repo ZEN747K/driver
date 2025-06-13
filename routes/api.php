@@ -30,10 +30,10 @@ Route::prefix('driver')->group(function () {
     // Protected routes (token required)
     Route::get('/profile', [DriverAuthController::class, 'getProfile']);
     Route::get('/status', [DriverAuthController::class, 'checkStatus']);
-    Route::get('/list', [DriverAPICtrl::class, 'index']);
-    Route::get('/{id}', [DriverAPICtrl::class, 'show']);
-    Route::put('/{id}/status', [DriverAPICtrl::class, 'updateStatus']);
-    Route::post('/infostore', [DriverAPICtrl::class, 'store']);
+    // Route::get('/list', [DriverAPICtrl::class, 'index']);
+    // Route::get('/{id}', [DriverAPICtrl::class, 'show']);
+    // Route::put('/{id}/status', [DriverAPICtrl::class, 'updateStatus']);
+    Route::post('/newUser', [DriverAPICtrl::class, 'store']);
 });
 
 // End Driver API

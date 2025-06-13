@@ -31,6 +31,7 @@ class Driver extends Model
         'vehicle_insurance_path',
         'service_type',
         'status',
+        'os'
     ];
 
     protected $hidden = [
