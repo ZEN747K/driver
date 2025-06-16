@@ -26,7 +26,7 @@ class DriverAPICtrl extends Controller
 
         return response()->json([
             'success' => true,
-            'drivers' => Driver::select('id', 'name', 'email', 'status')->get()
+            'drivers' => Driver::select('id', 'full_name', 'email', 'status')->get()
         ]);
     }
 

@@ -47,7 +47,7 @@ class DriverAuthController extends Controller
             'token' => $token,
             'driver' => [
                 'id' => $driver->id,
-                'name' => $driver->name,
+                'full_name' => $driver->full_name,
                 'email' => $driver->email,
                 'status' => $driver->status
             ],
