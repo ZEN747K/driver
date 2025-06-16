@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Driver;
 use App\Helpers\DriverAuthHelper;
 use App\Http\Controllers\Controller;
-use Jenssegers\Agent\Agent;
 
 
 class DriverAPICtrl extends Controller
@@ -86,6 +85,28 @@ class DriverAPICtrl extends Controller
     {
         // เก็บ OS ของผู้ใช้
         $os = $_SERVER['HTTP_USER_AGENT'];
+
+        $email = $request->input('email');
+        $phone = $request->input('phone');
+
+
+
+        if (Driver::where('email', $email)->exists()) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'ไม่สามารถบันทึกข้อมูลได้ เนื่องจากอีเมลนี้มีอยู่แล้วในระบบ',
+                'os' => $os,
+            ], 409);
+        }
+        if (Driver::where('phone', $phone)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ไม่สามารถบันทึกข้อมูลได้ เนื่องจากเบอร์นี้มีอยู่แล้วในระบบ',
+                'os' => $os,
+            ], 409); // 409 Conflict
+        }
+
         // Validate ข้อมูล
         $validated = $request->validate([
             'full_name' => 'required|string|max:255',
@@ -110,8 +131,8 @@ class DriverAPICtrl extends Controller
 
         // บันทึกข้อมูล
         $driver = Driver::create($validated);
-
         return response()->json([
+            'success' => true,
             'message' => 'Driver     created successfully',
             'os' => $os,
             'data' => $driver

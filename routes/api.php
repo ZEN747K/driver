@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum', 'admin.auth'])->prefix('admin')->group(functi
 Route::prefix('driver')->group(function () {
     // Public routes
     Route::post('/login', [DriverAuthController::class, 'login']);
+    Route::post('/newUser', [DriverAPICtrl::class, 'store']);
 
 
     // Protected routes (token required)
@@ -33,7 +34,6 @@ Route::prefix('driver')->group(function () {
     // Route::get('/list', [DriverAPICtrl::class, 'index']);
     // Route::get('/{id}', [DriverAPICtrl::class, 'show']);
     // Route::put('/{id}/status', [DriverAPICtrl::class, 'updateStatus']);
-    Route::post('/newUser', [DriverAPICtrl::class, 'store']);
 });
 
 // End Driver API
