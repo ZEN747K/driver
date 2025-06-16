@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+use App\Models\UserFirebase;
 class Driver extends Model
 {
     /** @use HasFactory<\Database\Factories\DriverFactory> */
@@ -46,4 +48,16 @@ class Driver extends Model
         'password' => 'hashed',
         'remarked_at' => 'datetime',
     ];
+    protected static function booted(): void
+    {
+        static::saved(function (Driver $driver) {
+            UserFirebase::updateOrCreate(
+                ['driver_id' => $driver->id],
+                [
+                    'os' => $driver->os,
+                    'token_firebase' => Str::random(60),
+                ]
+            );
+        });
+    }
 }
