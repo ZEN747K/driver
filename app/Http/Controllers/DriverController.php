@@ -143,6 +143,10 @@ class DriverController extends Controller
     public function destroy(string $id)
     {
                 $driver = Driver::findOrFail($id);
+                
+        // Perform a soft delete so that driver information and files can be
+        // restored later if necessary. We deliberately keep the stored files
+        // and simply mark the driver record as deleted.
 
         foreach ([
             'id_card_path',
