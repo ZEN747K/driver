@@ -3,21 +3,33 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mt-4">ADD Drivers</h1>
+    <h1 class="mt-4">Add Driver</h1>
     <a href="{{ route('drivers.index') }}" class="btn btn-secondary mb-3">Back</a>
+
+ 
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('drivers.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
-            <label class="form-label">Full Name</label>
-            <input type="text" name="full_name" class="form-control" required>
+            <label class="form-label">Full name</label>
+            <input type="text" name="full_name" class="form-control" value="{{ old('full_name') }}" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Phone</label>
-            <input type="text" name="phone" class="form-control" required>
+            <label class="form-label">Phone Number</label>
+            <input type="text" name="phone" class="form-control" value="{{ old('phone') }}" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control">
+            <input type="email" name="email" class="form-control" value="{{ old('email') }}">
         </div>
         <div class="mb-3">
             <label class="form-label">Password for Profile</label>
@@ -25,47 +37,32 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Bank Account</label>
-            <input type="text" name="bank_account" class="form-control" maxlength="14" required>
+            <input type="text" name="bank_account" maxlength="14" class="form-control" value="{{ old('bank_account') }}" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Birthdate</label>
-            <input type="date" name="birthdate" class="form-control">
+            <label class="form-label">Date of birth</label>
+            <input type="date" name="birthdate" class="form-control" value="{{ old('birthdate') }}">
         </div>
-     <div class="mb-3">
-    <label class="form-label">Gender</label>
-    <select name="gender" class="form-select" id="genderSelect">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option> <!-- เพิ่มตัวเลือก "Other" -->
-    </select>
-</div>
-
-<!-- ฟิลด์สำหรับกรอกเพศเอง -->
-<div class="mb-3" id="customGenderField" style="display: none;">
-    <label class="form-label">Please specify</label>
-    <input type="text" id="customGenderInput" class="form-control" placeholder="Enter gender">
-</div>
-
-<script>
-    document.getElementById('genderSelect').addEventListener('change', function() {
-        const customGenderField = document.getElementById('customGenderField');
-        const customGenderInput = document.getElementById('customGenderInput');
-
-        if (this.value === 'other') {
-            customGenderField.style.display = 'block';
-            customGenderInput.setAttribute('name', 'gender'); // เปลี่ยน name เพื่อให้ส่งค่าไปยังฟอร์ม
-        } else {
-            customGenderField.style.display = 'none';
-            customGenderInput.removeAttribute('name'); // ลบ name ออกเมื่อไม่ได้เลือก "Other"
-        }
-    });
-</script>
         <div class="mb-3">
-            <label class="form-label">ID Card</label>
+            <label class="form-label">Gender</label>
+            <select name="gender" class="form-select" id="genderSelect">
+                <option value="male" {{ old('gender') === 'male' ? 'selected' : '' }}>ชาย</option>
+                <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>หญิง</option>
+                <option value="other" {{ (old('gender') && !in_array(old('gender'), ['male','female'])) ? 'selected' : '' }}>อื่นๆ</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="customGenderField" style="display: none;">
+            <label class="form-label">โปรดระบุ</label>
+            <input type="text" id="customGenderInput" class="form-control" placeholder="ระบุเพศ" value="{{ (old('gender') && !in_array(old('gender'), ['male','female'])) ? old('gender') : '' }}" name="gender">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">ID card</label>
             <input type="file" name="id_card" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Driver License</label>
+            <label class="form-label">Driver's license</label>
             <input type="file" name="driver_license" class="form-control" required>
         </div>
         <div class="mb-3">
@@ -85,14 +82,59 @@
             <input type="file" name="vehicle_insurance" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Service Type</label>
+            <label class="form-label">Service type</label>
             <select name="service_type" class="form-select" required>
-                <option value="car">Car</option>
-                <option value="motorcycle">Motorcycle</option>
-                <option value="delivery">Delivery</option>
+                <option value="car" {{ old('service_type') === 'car' ? 'selected' : '' }}>รถยนต์</option>
+                <option value="motorcycle" {{ old('service_type') === 'motorcycle' ? 'selected' : '' }}>มอเตอร์ไซค์</option>
+                <option value="delivery" {{ old('service_type') === 'delivery' ? 'selected' : '' }}>ส่งของ</option>
             </select>
         </div>
+
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function toggleCustomGenderField() {
+        const genderSelect = document.getElementById('genderSelect');
+        const customGenderField = document.getElementById('customGenderField');
+        const customGenderInput = document.getElementById('customGenderInput');
+
+        if (genderSelect.value === 'other') {
+            customGenderField.style.display = 'block';
+            customGenderInput.setAttribute('name', 'gender');
+        } else {
+            customGenderField.style.display = 'none';
+            customGenderInput.removeAttribute('name');
+            customGenderInput.value = '';
+        }
+    }
+
+    document.getElementById('genderSelect').addEventListener('change', toggleCustomGenderField);
+
+    window.onload = toggleCustomGenderField;
+
+
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'สำเร็จ',
+            text: '{{ session("success") }}',
+            timer: 2500,
+            timerProgressBar: true,
+            showConfirmButton: false
+        });
+    @elseif($errors->any())
+     
+        Swal.fire({
+            icon: 'error',
+            title: 'เกิดข้อผิดพลาด',
+            html: '{!! implode("<br>", $errors->all()) !!}',
+            showConfirmButton: true,
+        });
+    @endif
+</script>
 @endsection
