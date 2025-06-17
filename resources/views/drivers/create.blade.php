@@ -6,7 +6,6 @@
     <h1 class="mt-4">Add Driver</h1>
     <a href="{{ route('drivers.index') }}" class="btn btn-secondary mb-3">Back</a>
 
- 
     @if($errors->any())
         <div class="alert alert-danger">
             <ul class="mb-0">
@@ -40,23 +39,38 @@
             <input type="text" name="bank_account" maxlength="14" class="form-control" value="{{ old('bank_account') }}" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Date of birth</label>
-            <input type="date" name="birthdate" class="form-control" value="{{ old('birthdate') }}">
+            <label class="form-label">Birthdate</label>
+            <input type="date" name="birthdate" class="form-control">
         </div>
+
         <div class="mb-3">
-            <label class="form-label">Gender</label>
-            <select name="gender" class="form-select" id="genderSelect">
-                <option value="male" {{ old('gender') === 'male' ? 'selected' : '' }}>ชาย</option>
-                <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>หญิง</option>
-                <option value="other" {{ (old('gender') && !in_array(old('gender'), ['male','female'])) ? 'selected' : '' }}>อื่นๆ</option>
-            </select>
-        </div>
+    <label class="form-label">Gender</label>
+    <select name="gender" class="form-select" id="genderSelect">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option> 
+    </select>
+</div>
+<div class="mb-3" id="customGenderField" style="display: none;">
+    <label class="form-label">Please specify</label>
+    <input type="text" id="customGenderInput" class="form-control" placeholder="Enter gender">
+</div>
 
-        <div class="mb-3" id="customGenderField" style="display: none;">
-            <label class="form-label">โปรดระบุ</label>
-            <input type="text" id="customGenderInput" class="form-control" placeholder="ระบุเพศ" value="{{ (old('gender') && !in_array(old('gender'), ['male','female'])) ? old('gender') : '' }}" name="gender">
-        </div>
+<script>
+    document.getElementById('genderSelect').addEventListener('change', function() {
+        const customGenderField = document.getElementById('customGenderField');
+        const customGenderInput = document.getElementById('customGenderInput');
 
+        if (this.value === 'other') {
+            customGenderField.style.display = 'block';
+            customGenderInput.setAttribute('name', 'gender'); 
+        } else {
+            customGenderField.style.display = 'none';
+            customGenderInput.removeAttribute('name'); 
+        }
+    });
+</script>
+     
         <div class="mb-3">
             <label class="form-label">ID card</label>
             <input type="file" name="id_card" class="form-control" required>
@@ -82,11 +96,11 @@
             <input type="file" name="vehicle_insurance" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Service type</label>
+            <label class="form-label">Service Type</label>
             <select name="service_type" class="form-select" required>
-                <option value="car" {{ old('service_type') === 'car' ? 'selected' : '' }}>รถยนต์</option>
-                <option value="motorcycle" {{ old('service_type') === 'motorcycle' ? 'selected' : '' }}>มอเตอร์ไซค์</option>
-                <option value="delivery" {{ old('service_type') === 'delivery' ? 'selected' : '' }}>ส่งของ</option>
+                <option value="car">Car</option>
+                <option value="motorcycle">Motorcycle</option>
+                <option value="delivery">Delivery</option>
             </select>
         </div>
 
@@ -98,43 +112,52 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function toggleCustomGenderField() {
-        const genderSelect = document.getElementById('genderSelect');
-        const customGenderField = document.getElementById('customGenderField');
-        const customGenderInput = document.getElementById('customGenderInput');
+document.addEventListener('DOMContentLoaded', function () {
+    const genderSelect = document.getElementById('genderSelect');
+    const customGenderField = document.getElementById('customGenderField');
+    const customGenderInput = document.getElementById('customGenderInput');
+    const finalGender = document.getElementById('finalGender');
 
+    function updateGender() {
         if (genderSelect.value === 'other') {
             customGenderField.style.display = 'block';
-            customGenderInput.setAttribute('name', 'gender');
+            finalGender.value = customGenderInput.value;
         } else {
             customGenderField.style.display = 'none';
-            customGenderInput.removeAttribute('name');
-            customGenderInput.value = '';
+            finalGender.value = genderSelect.value;
         }
     }
 
-    document.getElementById('genderSelect').addEventListener('change', toggleCustomGenderField);
+    genderSelect.addEventListener('change', updateGender);
+    customGenderInput.addEventListener('input', function () {
+        if (genderSelect.value === 'other') {
+            finalGender.value = customGenderInput.value;
+        }
+    });
 
-    window.onload = toggleCustomGenderField;
-
-
-    @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'สำเร็จ',
-            text: '{{ session("success") }}',
-            timer: 2500,
-            timerProgressBar: true,
-            showConfirmButton: false
-        });
-    @elseif($errors->any())
-     
-        Swal.fire({
-            icon: 'error',
-            title: 'เกิดข้อผิดพลาด',
-            html: '{!! implode("<br>", $errors->all()) !!}',
-            showConfirmButton: true,
-        });
-    @endif
+    updateGender();
+});
 </script>
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'สำเร็จ',
+        text: '{{ session("success") }}',
+        timer: 2500,
+        timerProgressBar: true,
+        showConfirmButton: false
+    });
+</script>
+@elseif($errors->any())
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        html: `{!! implode('<br>', $errors->all()) !!}`,
+        showConfirmButton: true,
+    });
+</script>
+@endif
 @endsection
