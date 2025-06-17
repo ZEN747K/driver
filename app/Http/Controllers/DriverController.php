@@ -237,8 +237,8 @@ class DriverController extends Controller
         $base64 = base64_encode($json);
 
         return response()->json([
-            'encoded' => $base64,
-            'raw' => $driver // แนบ raw ด้วยสำหรับ debug
+            'encoded' => $base64
+            
         ]);
     }
 }
