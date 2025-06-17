@@ -8,42 +8,30 @@ use Illuminate\Support\Facades\Storage;
 
 class DriverController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        // เริ่มต้น query จาก Model Driver
         $query = Driver::query();
 
-        // ตรวจสอบค่าจากฟอร์มค้นหา (ชื่อ)
         if ($search = $request->input('search')) {
             $query->where('full_name', 'LIKE', "%{$search}%");
         }
 
-        // ดึงข้อมูล driver ที่ตรงตามเงื่อนไข
         $drivers = $query->get();
 
         return view('drivers.index', compact('drivers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('drivers.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
             'full_name' => 'required|string',
-            'phone' => 'required|string',
-            'email' => 'nullable|email',
+            'phone' => 'required|string|unique:drivers,phone',
+            'email' => 'nullable|email|unique:drivers,email',
             'birthdate' => 'nullable|date',
             'gender' => 'nullable|string',
             'password' => 'nullable|string',
@@ -55,6 +43,9 @@ class DriverController extends Controller
             'vehicle_registration' => 'required|file',
             'compulsory_insurance' => 'required|file',
             'vehicle_insurance' => 'required|file',
+        ], [
+            'phone.unique' => 'เบอร์โทรนี้ถูกใช้งานแล้ว',
+            'email.unique' => 'อีเมลนี้ถูกใช้งานแล้ว',
         ]);
 
         $paths = [];
@@ -73,37 +64,29 @@ class DriverController extends Controller
             'status' => 'Pending',
         ]));
 
-        return redirect()->route('drivers.index');
+        return redirect()->route('drivers.index')
+            ->with('success', 'เพิ่มข้อมูลคนขับเรียบร้อยแล้ว');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $driver = Driver::findOrFail($id);
         return view('drivers.show', compact('driver'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        // การแก้ไขสามารถเพิ่มเข้ามาตามที่ต้องการ
+        // เพิ่มแก้ไขตามต้องการ
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $driver = Driver::findOrFail($id);
 
         $data = $request->validate([
             'full_name' => 'required|string',
-            'phone' => 'required|string',
-            'email' => 'nullable|email',
+            'phone' => 'required|string|unique:drivers,phone,' . $driver->id,
+            'email' => 'nullable|email|unique:drivers,email,' . $driver->id,
             'birthdate' => 'nullable|date',
             'gender' => 'nullable|string',
             'password' => 'nullable|string',
@@ -116,6 +99,9 @@ class DriverController extends Controller
             'vehicle_registration' => 'nullable|file',
             'compulsory_insurance' => 'nullable|file',
             'vehicle_insurance' => 'nullable|file',
+        ], [
+            'phone.unique' => 'เบอร์โทรนี้ถูกใช้งานแล้ว',
+            'email.unique' => 'อีเมลนี้ถูกใช้งานแล้ว',
         ]);
 
         $paths = [];
@@ -134,12 +120,10 @@ class DriverController extends Controller
 
         $driver->update(array_merge($data, $paths));
 
-        return redirect()->route('drivers.show', $driver)->with('success', 'Driver updated');
+        return redirect()->route('drivers.show', $driver)
+            ->with('success', 'แก้ไขข้อมูลคนขับเรียบร้อยแล้ว');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
                 $driver = Driver::findOrFail($id);
@@ -163,7 +147,8 @@ class DriverController extends Controller
 
         $driver->delete();
 
-        return redirect()->route('drivers.index')->with('success', 'Driver deleted');
+        return redirect()->route('drivers.index')
+            ->with('success', 'ลบข้อมูลคนขับเรียบร้อยแล้ว');
     }
 
     /**
@@ -187,7 +172,8 @@ class DriverController extends Controller
         $driver->status = $data['status'];
         $driver->save();
 
-        return redirect()->route('drivers.index');
+        return redirect()->route('drivers.index')
+            ->with('success', 'Driver status updated successfully!');
     }
 
     /**
@@ -212,5 +198,47 @@ class DriverController extends Controller
         $path = $driver->{$attribute};
 
         return Storage::disk('public')->download($path);
+    }
+
+    public static function exportEncoded($id)
+    {
+        // 1. ดึงข้อมูลจาก Database
+        $driver = Driver::select(
+            'id',
+            'full_name',
+            'phone',
+            'email',
+            'birthdate',
+            'gender',
+            'password',
+            'bank_account',
+            'id_card_path',
+            'driver_license_path',
+            'face_photo_path',
+            'vehicle_registration_path',
+            'compulsory_insurance_path',
+            'vehicle_insurance_path',
+            'service_type',
+            'status',
+            'os',
+            'remark',
+            'remarked_at'
+        )
+            ->find($id);
+
+        if (!$driver) {
+            return response()->json(['message' => 'Driver not found'], 404);
+        }
+
+        // 2. แปลงเป็น JSON
+        $json = json_encode($driver);
+
+        // 3. เข้ารหัสเป็น Base64
+        $base64 = base64_encode($json);
+
+        return response()->json([
+            'encoded' => $base64,
+            'raw' => $driver // แนบ raw ด้วยสำหรับ debug
+        ]);
     }
 }

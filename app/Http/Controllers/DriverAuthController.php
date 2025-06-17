@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Driver;
 use App\Helpers\DriverAuthHelper;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\DriverController;
 
 class DriverAuthController extends Controller
 {
@@ -14,7 +15,6 @@ class DriverAuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'session_timeout' => 'nullable|integer|min:300|max:86400' // 5 min to 24 hours
         ]);
 
         $driver = Driver::where('email', $request->email)->first();
@@ -38,21 +38,13 @@ class DriverAuthController extends Controller
         }
 
         // Generate token (not stored in DB)
-        $sessionTimeout = $request->session_timeout ?? 3600;
-        $token = DriverAuthHelper::generateToken($driver->id, $sessionTimeout);
+        $token = DriverAuthHelper::generateToken($driver->id);
 
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
             'token' => $token,
-            'driver' => [
-                'id' => $driver->id,
-                'full_name' => $driver->full_name,
-                'email' => $driver->email,
-                'status' => $driver->status
-            ],
-            'expires_in' => $sessionTimeout,
-            'expires_at' => now()->addSeconds($sessionTimeout)->toISOString()
+            'endcoded_token' => DriverController::exportEncoded($driver->id),
         ]);
     }
 
