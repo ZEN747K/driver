@@ -7,18 +7,31 @@ use Carbon\Carbon;
 
 class DriverAuthHelper
 {
-    private static $secretKey = 'your-secret-key-here'; // Move to .env in production
+    private static $secretKey; // Move to .env in production
 
     /**
      * Generate token for driver (not stored in DB)
      */
-    public static function generateToken($driverId, $sessionTimeout = 3600)
+    public static function generateToken($driverId)
     {
+        if (!self::$secretKey) {
+            self::$secretKey = env('MY_SECRET_KEY');
+            if (!self::$secretKey) {
+                \Log::error('MY_SECRET_KEY not found in environment');
+                return [
+                    'valid' => false,
+                    'message' => 'Server configuration error',
+                    'driver' => null
+                ];
+            }
+        }
+
+        $issuedAt = Carbon::now()->timestamp;
+
         $tokenData = [
             'driver_id' => $driverId,
-            'issued_at' => Carbon::now()->timestamp,
-            'expires_at' => Carbon::now()->addSeconds($sessionTimeout)->timestamp,
-            'hash' => hash('sha256', $driverId . self::$secretKey . Carbon::now()->timestamp)
+            'issued_at' => $issuedAt,
+            'hash' => hash('sha256', $driverId . self::$secretKey . $issuedAt)
         ];
 
         $jsonToken = json_encode($tokenData);
@@ -30,6 +43,9 @@ class DriverAuthHelper
      */
     public static function validateDriverToken($token)
     {
+        if (!self::$secretKey) {
+            self::$secretKey = env('MY_SECRET_KEY');
+        }
         if (!$token) {
             return [
                 'valid' => false,
@@ -47,15 +63,6 @@ class DriverAuthHelper
                 return [
                     'valid' => false,
                     'message' => 'Invalid token format',
-                    'driver' => null
-                ];
-            }
-
-            // Check token expiration
-            if (Carbon::now()->timestamp > $tokenData['expires_at']) {
-                return [
-                    'valid' => false,
-                    'message' => 'Token expired',
                     'driver' => null
                 ];
             }
@@ -102,7 +109,8 @@ class DriverAuthHelper
             return [
                 'valid' => false,
                 'message' => 'Token validation failed',
-                'driver' => null
+                'driver' => null,
+                'Error ' => $e->getMessage()
             ];
         }
     }
@@ -157,8 +165,8 @@ class DriverAuthHelper
     public static function getTokenFromRequest($request)
     {
         return $request->bearerToken() ??
-               $request->header('api-token') ??
-               $request->input('token');
+            $request->header('api-token') ??
+            $request->input('token');
     }
 
     /**

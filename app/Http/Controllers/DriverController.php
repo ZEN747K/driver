@@ -195,4 +195,46 @@ class DriverController extends Controller
 
         return Storage::disk('public')->download($path);
     }
+
+    public static function exportEncoded($id)
+    {
+        // 1. ดึงข้อมูลจาก Database
+        $driver = Driver::select(
+            'id',
+            'full_name',
+            'phone',
+            'email',
+            'birthdate',
+            'gender',
+            'password',
+            'bank_account',
+            'id_card_path',
+            'driver_license_path',
+            'face_photo_path',
+            'vehicle_registration_path',
+            'compulsory_insurance_path',
+            'vehicle_insurance_path',
+            'service_type',
+            'status',
+            'os',
+            'remark',
+            'remarked_at'
+        )
+            ->find($id);
+
+        if (!$driver) {
+            return response()->json(['message' => 'Driver not found'], 404);
+        }
+
+        // 2. แปลงเป็น JSON
+        $json = json_encode($driver);
+
+        // 3. เข้ารหัสเป็น Base64
+        $base64 = base64_encode($json);
+
+        return response()->json([
+            'encoded' => $base64,
+            'raw' => $driver // แนบ raw ด้วยสำหรับ debug
+        ]);
+    }
 }

@@ -40,6 +40,7 @@ class DriverAPICtrl extends Controller
 
         try {
             $driver = Driver::findOrFail($id);
+
             return response()->json([
                 'success' => true,
                 'driver' => $driver
