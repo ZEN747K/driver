@@ -33,6 +33,21 @@ class CustomerQueueController extends Controller
 
         $status = $validated['status'] ?? 'waiting';
 
+        // Reject duplicate pickuped queue for same customer and locations
+        $duplicatePickup = QueueData::where('customer_id', $validated['customer_id'])
+            ->where('customer_phone', $validated['customer_phone'])
+            ->where('pickup_location', $validated['pickup_location'])
+            ->where('destination', $validated['destination'])
+            ->where('status', 'pickuped')
+            ->first();
+
+        if ($duplicatePickup) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Queue already pickuped with the same information.',
+            ], 422);
+        }
+
         // Abort previous waiting queue with same customer and locations
         $existing = QueueData::where('customer_id', $validated['customer_id'])
             ->where('pickup_location', $validated['pickup_location'])
