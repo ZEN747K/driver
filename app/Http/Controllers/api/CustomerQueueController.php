@@ -5,6 +5,8 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\QueueData;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class CustomerQueueController extends Controller
 {
@@ -32,6 +34,40 @@ class CustomerQueueController extends Controller
         ]);
 
         $status = $validated['status'] ?? 'waiting';
+
+        $firstTime = isset($validated['first_time'])
+            ? Carbon::parse($validated['first_time'])
+            : Carbon::now();
+
+        if ($status === 'pickuped') {
+            return response()->json([
+                'success' => false,
+                'message' => 'New queue must start with waiting status.',
+            ], 422);
+        }else if ($status === 'abort') {
+            return response()->json([
+                'success' => false,
+                'message' => 'New queue must start with waiting status.',
+            ], 422);
+        }
+
+        // Reject new queue if similar record exists within five minutes
+        $recentDuplicate = QueueData::where('customer_id', $validated['customer_id'])
+            ->where('customer_phone', $validated['customer_phone'])
+            ->where('pickup_location', $validated['pickup_location'])
+            ->where('destination', $validated['destination'])
+            ->whereBetween('first_time', [
+                $firstTime->copy()->subMinutes(5),
+                $firstTime->copy()->addMinutes(5),
+            ])
+            ->first();
+
+        if ($recentDuplicate) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Queue already exists with the same information within 5 minutes.',
+            ], 422);
+        }
 
         // Reject duplicate pickuped queue for same customer and locations
         $duplicatePickup = QueueData::where('customer_id', $validated['customer_id'])
