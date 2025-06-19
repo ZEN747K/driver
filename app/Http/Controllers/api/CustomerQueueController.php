@@ -39,34 +39,61 @@ class CustomerQueueController extends Controller
             ? Carbon::parse($validated['first_time'])
             : Carbon::now();
 
-        if ($status === 'pickuped') {
-            return response()->json([
-                'success' => false,
-                'message' => 'New queue must start with waiting status.',
-            ], 422);
-        }else if ($status === 'abort') {
+        if ($status === 'pickuped' && $validated['first_time'] !== null) {
+            // Skip validation for pickuped status with non-null first_time
+        } else if ($status === 'pickuped') {
             return response()->json([
                 'success' => false,
                 'message' => 'New queue must start with waiting status.',
             ], 422);
         }
 
-        // Reject new queue if similar record exists within five minutes
-        $recentDuplicate = QueueData::where('customer_id', $validated['customer_id'])
-            ->where('customer_phone', $validated['customer_phone'])
-            ->where('pickup_location', $validated['pickup_location'])
-            ->where('destination', $validated['destination'])
-            ->whereBetween('first_time', [
-                $firstTime->copy()->subMinutes(5),
-                $firstTime->copy()->addMinutes(5),
-            ])
-            ->first();
+        if ($status === 'abort') {
+            $waitingQueue = QueueData::where('customer_id', $validated['customer_id'])
+                ->where('status', 'waiting')
+                ->first();
 
-        if ($recentDuplicate) {
+            if (!$waitingQueue) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No matching waiting queue found for the provided status abort.',
+                ], 422);
+            }
+
+            $queue = QueueData::create([
+                'customer_id' => $validated['customer_id'],
+                'customer_phone' => $validated['customer_phone'],
+                'pickup_location' => $validated['pickup_location'],
+                'destination' => $validated['destination'],
+                'first_time' => $firstTime,
+                'status' => 'abort',
+                'pickup_time' => null,
+            ]);
+
             return response()->json([
-                'success' => false,
-                'message' => 'Queue already exists with the same information within 5 minutes.',
-            ], 422);
+                'success' => true,
+                'data' => $queue,
+                'message' => 'Queue has been aborted and cannot be modified further.',
+            ], 201);
+        }
+
+        if (!($status === 'pickuped' && $validated['first_time'] !== null)) {
+            $recentDuplicate = QueueData::where('customer_id', $validated['customer_id'])
+                ->where('customer_phone', $validated['customer_phone'])
+                ->where('pickup_location', $validated['pickup_location'])
+                ->where('destination', $validated['destination'])
+                ->whereBetween('first_time', [
+                    $firstTime->copy()->subMinutes(5),
+                    $firstTime->copy()->addMinutes(5),
+                ])
+                ->first();
+
+            if ($recentDuplicate) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Queue already exists with the same information within 5 minutes.',
+                ], 422);
+            }
         }
 
         // Reject duplicate pickuped queue for same customer and locations
@@ -91,11 +118,24 @@ class CustomerQueueController extends Controller
             ->where('status', 'waiting')
             ->first();
 
+        if ($existing && $status === 'pickuped') {
+            $existing->update([
+                'status' => 'pickuped',
+                'pickup_time' => $validated['pickup_time'] ?? now(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $existing,
+                'message' => 'Queue status updated to pickuped.',
+            ], 200);
+        }
+
         if ($existing) {
             $existing->update(['status' => 'abort']);
         }
 
-        $firstTime = $validated['first_time'] ?? now();
+        
         $pickupTime = null;
         if ($status === 'pickuped') {
             $pickupTime = $validated['pickup_time'] ?? now();
@@ -131,19 +171,43 @@ class CustomerQueueController extends Controller
             ], 422);
         }
 
-        $validated = $request->validate([
+        $rules = [
             'status' => 'required|in:waiting,pickuped,abort',
-        ]);
+        ];
 
-        $queue->status = $validated['status'];
+        $validated = $request->validate($rules);
 
-        if ($validated['status'] === 'pickuped') {
-            $queue->pickup_time = now();
+        if ($request->input('status') === 'pickuped') {
+            $rules['first_time'] = 'required|date';
+            $rules['pickup_time'] = 'required|date';
         }
 
-        if ($validated['status'] === 'abort') {
+        $validated = $request->validate($rules);
+
+        $status = $validated['status'];
+
+        if ($status === 'pickuped') {
+            if ($queue->status !== 'waiting') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Queue is not in waiting status.',
+                ], 422);
+            }
+
+            if (Carbon::parse($validated['first_time'])->ne($queue->first_time)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid first_time provided.',
+                ], 422);
+            }
+
+            $queue->pickup_time = Carbon::parse($validated['pickup_time']);
+        }
+
+        if ($status === 'abort') {
             $queue->pickup_time = null;
         }
+        $queue->status = $status;
 
         $queue->save();
 

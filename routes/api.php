@@ -42,6 +42,6 @@ Route::prefix('driver')->group(function () {
 // Customer Queue API
 Route::prefix('customer')->group(function () {
     Route::post('/queue', [CustomerQueueController::class, 'store']);
-    Route::patch('/queue/{id}', [CustomerQueueController::class, 'update']);
+    // Route::patch('/queue/{id}', [CustomerQueueController::class, 'update']);
 });
 // End Customer Queue API
