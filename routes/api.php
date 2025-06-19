@@ -5,6 +5,7 @@ use App\Http\Controllers\api\get_userAPI;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\DriverAuthController;
 use App\Http\Controllers\api\DriverAPICtrl;
+use App\Http\Controllers\api\CustomerQueueController;
 
 // Admin API
 Route::prefix('admin')->group(function () {
@@ -37,3 +38,10 @@ Route::prefix('driver')->group(function () {
 });
 
 // End Driver API
+
+// Customer Queue API
+Route::prefix('customer')->group(function () {
+    Route::post('/queue', [CustomerQueueController::class, 'store']);
+    Route::patch('/queue/{id}', [CustomerQueueController::class, 'update']);
+});
+// End Customer Queue API
