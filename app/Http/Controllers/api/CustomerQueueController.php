@@ -53,28 +53,24 @@ class CustomerQueueController extends Controller
                 ->where('status', 'waiting')
                 ->first();
 
-            if (!$waitingQueue) {
+            if ($waitingQueue) {
+                $waitingQueue->update([
+                    'status' => 'abort',
+                    'first_time' => null,
+                    'pickup_time' => null,
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'data' => $waitingQueue,
+                    'message' => 'Queue status updated to abort and cannot be modified further.',
+                ], 200);
+            } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No matching waiting queue found for the provided status abort.',
+                    'message' => 'No matching waiting queue found for the provided customer_id.',
                 ], 422);
             }
-
-            $queue = QueueData::create([
-                'customer_id' => $validated['customer_id'],
-                'customer_phone' => $validated['customer_phone'],
-                'pickup_location' => $validated['pickup_location'],
-                'destination' => $validated['destination'],
-                'first_time' => $firstTime,
-                'status' => 'abort',
-                'pickup_time' => null,
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'data' => $queue,
-                'message' => 'Queue has been aborted and cannot be modified further.',
-            ], 201);
         }
 
         if (!($status === 'pickuped' && $validated['first_time'] !== null)) {
@@ -150,6 +146,29 @@ class CustomerQueueController extends Controller
             'status' => $status,
             'pickup_time' => $pickupTime,
         ]);
+
+        // ตรวจสอบกรณีข้อมูลใหม่หมด ต้องไม่มี first_time และ pickup_time
+        $isNewQueue = !$existing && !$recentDuplicate && !$duplicatePickup;
+        if ($isNewQueue && ($validated['first_time'] !== null || $validated['pickup_time'] !== null)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'New queue must have first_time and pickup_time as null.',
+            ], 422);
+        }
+
+        // ตรวจสอบกรณีข้อมูลใหม่แต่สถานะเริ่มต้นเป็น pickuped
+        if ($status === 'pickuped' && $validated['first_time'] !== null) {
+            $waitingQueue = QueueData::where('customer_id', $validated['customer_id'])
+                ->where('first_time', $validated['first_time'])
+                ->where('status', 'waiting')
+                ->first();
+            if (!$waitingQueue) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No matching waiting queue found for the provided customer_id and first_time.',
+                ], 422);
+            }
+        }
 
         return response()->json([
             'success' => true,
